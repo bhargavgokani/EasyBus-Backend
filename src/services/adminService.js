@@ -1,7 +1,7 @@
 const { prisma } = require("../prisma/client");
 const { ApiError } = require("../utils/ApiError");
 
-exports.getDashboardStats = async () => {
+async function getDashboardStats() {
   const [
     totalBuses,
     totalRoutes,
@@ -20,7 +20,7 @@ exports.getDashboardStats = async () => {
     totalSchedules,
     totalBookings,
   };
-};
+}
 
 function normalizeCityName(name) {
   return String(name || "").trim();
@@ -209,5 +209,6 @@ module.exports = {
   addRoute,
   createSchedule,
   viewAllBookings,
+  getDashboardStats,
 };
 
