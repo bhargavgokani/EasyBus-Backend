@@ -16,7 +16,8 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: "*",
+    origin: true, // allow requests, safe for Flutter
+    credentials: true,
   })
 );
 app.use(express.json());
