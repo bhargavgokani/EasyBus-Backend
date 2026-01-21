@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+   url = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings           Booking[]
+  seatAvailabilities SeatAvailability[]
+
+  @@index([email])
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  routesFrom Route[] @relation("RouteFromCity")
+  routesTo   Route[] @relation("RouteToCity")
+}
+
+model Bus {
+  id         Int      @id @default(autoincrement())
+  name       String
+  number     String   @unique
+  type       String
+  totalSeats Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  seats     Seat[]
+  schedules BusSchedule[]
+}
+
+model Route {
+  id            Int      @id @default(autoincrement())
+  sourceCityId  Int
+  destinationId Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sourceCity      City @relation("RouteFromCity", fields: [sourceCityId], references: [id])
+  destinationCity City @relation("RouteToCity", fields: [destinationId], references: [id])
+
+  schedules BusSchedule[]
+
+  @@unique([sourceCityId, destinationId])
+  @@index([sourceCityId, destinationId])
+}
+
+model BusSchedule {
+  id            Int      @id @default(autoincrement())
+  busId         Int
+  routeId       Int
+  travelDate    DateTime @db.Date // Calendar date in IST
+  departureTime DateTime
+  arrivalTime   DateTime
+  price         Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bus   Bus   @relation(fields: [busId], references: [id])
+  route Route @relation(fields: [routeId], references: [id])
+
+  seatAvailabilities SeatAvailability[]
+  bookings           Booking[]
+
+  @@index([busId, routeId, travelDate])
+}
+
+model Seat {
+  id        Int      @id @default(autoincrement())
+  busId     Int
+  label     String // e.g. A1, A2
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bus            Bus                @relation(fields: [busId], references: [id])
+  availabilities SeatAvailability[]
+
+  @@unique([busId, label])
+}
+
+enum SeatStatus {
+  AVAILABLE
+  BLOCKED
+  BOOKED
+}
+
+model SeatAvailability {
+  id           Int        @id @default(autoincrement())
+  scheduleId   Int
+  seatId       Int
+  status       SeatStatus @default(AVAILABLE)
+  blockedById  Int?
+  blockedUntil DateTime?
+  bookingId    Int?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  schedule  BusSchedule @relation(fields: [scheduleId], references: [id])
+  seat      Seat        @relation(fields: [seatId], references: [id])
+  blockedBy User?       @relation(fields: [blockedById], references: [id])
+  booking   Booking?    @relation(fields: [bookingId], references: [id])
+
+  @@unique([scheduleId, seatId])
+  @@index([scheduleId, status])
+  @@index([blockedById, blockedUntil])
+}
+
+model Booking {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  scheduleId  Int
+  totalAmount Int
+  status      BookingStatus @default(CONFIRMED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user               User               @relation(fields: [userId], references: [id])
+  schedule           BusSchedule        @relation(fields: [scheduleId], references: [id])
+  passengers         Passenger[]
+  payment            Payment?
+  seatAvailabilities SeatAvailability[]
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model Passenger {
+  id        Int      @id @default(autoincrement())
+  bookingId Int
+  name      String
+  age       Int
+  gender    String
+  seatLabel String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model Payment {
+  id          Int           @id @default(autoincrement())
+  bookingId   Int           @unique
+  amount      Int
+  provider    String        @default("DUMMY")
+  referenceId String
+  status      PaymentStatus @default(SUCCESS)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([provider, status])
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+}
