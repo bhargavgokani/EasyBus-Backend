@@ -1,6 +1,27 @@
 const { prisma } = require("../prisma/client");
 const { ApiError } = require("../utils/ApiError");
 
+exports.getDashboardStats = async () => {
+  const [
+    totalBuses,
+    totalRoutes,
+    totalSchedules,
+    totalBookings,
+  ] = await prisma.$transaction([
+    prisma.bus.count(),
+    prisma.route.count(),
+    prisma.busSchedule.count(),
+    prisma.booking.count(),
+  ]);
+
+  return {
+    totalBuses,
+    totalRoutes,
+    totalSchedules,
+    totalBookings,
+  };
+};
+
 function normalizeCityName(name) {
   return String(name || "").trim();
 }

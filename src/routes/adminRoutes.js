@@ -12,6 +12,7 @@ router.post("/buses", adminController.addBus);
 router.post("/routes", adminController.addRoute);
 router.post("/schedules", adminController.createSchedule);
 router.get("/bookings", adminController.viewBookings);
+router.get("/dashboard", adminController.getDashboardStats);
 
 module.exports = router;
 

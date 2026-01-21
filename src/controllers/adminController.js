@@ -41,11 +41,17 @@ async function viewBookings(req, res) {
   return res.status(200).json({ success: true, bookings });
 }
 
+async function getDashboardStats(req, res) {
+  const stats = await adminService.getDashboardStats();
+  return res.status(200).json(stats);
+}
+
 module.exports = {
   addCity,
   addBus,
   addRoute,
   createSchedule,
   viewBookings,
+  getDashboardStats,
 };
 
