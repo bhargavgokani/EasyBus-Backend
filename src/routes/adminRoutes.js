@@ -15,6 +15,7 @@ router.get("/bookings", adminController.viewBookings);
 router.get("/dashboard", adminController.getDashboardStats);
 router.get("/cities", adminController.getCities);
 router.get("/routes", adminController.getRoutes);  
+router.get("/buses", adminController.getBuses);
 
 module.exports = router;
 

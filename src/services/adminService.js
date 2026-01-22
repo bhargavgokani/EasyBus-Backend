@@ -89,6 +89,18 @@ async function addBus({ name, number, type, totalSeats }) {
   });
 }
 
+async function getBuses() {
+  return await prisma.bus.findMany({
+    orderBy: {
+      id: "desc",
+    },
+    include: {
+      seats: false,  // no need to load seats for dropdown
+    },
+  });
+}
+
+
 async function addRoute({ sourceCityId, destinationId }) {
   sourceCityId = Number(sourceCityId);
   destinationId = Number(destinationId);
@@ -225,6 +237,7 @@ module.exports = {
   addCity,
   getCities,
   addBus,
+  getBuses,
   getRoutes,
   addRoute,
   createSchedule,

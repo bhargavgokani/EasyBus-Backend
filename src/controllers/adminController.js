@@ -23,6 +23,12 @@ async function addBus(req, res) {
   return res.status(201).json({ success: true, bus });
 }
 
+async function getBuses(req, res) {
+  const buses = await adminService.getBuses();
+  return res.status(200).json({ success: true, buses });
+}
+
+
 async function addRoute(req, res) {
   const { sourceCityId, destinationId } = req.body || {};
   const route = await adminService.addRoute({ sourceCityId, destinationId });
@@ -62,6 +68,7 @@ module.exports = {
   addCity,
   getCities,
   addBus,
+  getBuses,
   getRoutes,
   addRoute,
   createSchedule,
