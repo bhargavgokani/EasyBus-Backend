@@ -10,6 +10,7 @@ const seatRoutes = require("./routes/seatRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const { initSeatReleaseCron } = require("./jobs/seatReleaseJob");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/buses", busRoutes);
 app.use("/seats", seatRoutes);
 app.use("/booking", bookingRoutes);
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 
 // Global error handler
 app.use(errorHandler);
