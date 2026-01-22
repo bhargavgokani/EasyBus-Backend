@@ -54,6 +54,13 @@ async function createSchedule(req, res) {
   return res.status(201).json({ success: true, schedule });
 }
 
+async function getSchedules(req, res) {
+  const schedules = await adminService.getSchedules();
+  return res.status(200).json({ success: true, schedules });
+}
+
+
+
 async function viewBookings(req, res) {
   const bookings = await adminService.viewAllBookings();
   return res.status(200).json({ success: true, bookings });
@@ -72,6 +79,7 @@ module.exports = {
   getRoutes,
   addRoute,
   createSchedule,
+  getSchedules,
   viewBookings,
   getDashboardStats,
 };

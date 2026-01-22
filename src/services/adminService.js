@@ -208,6 +208,25 @@ async function createSchedule({
   });
 }
 
+async function getSchedules() {
+  return await prisma.busSchedule.findMany({
+    include: {
+      bus: true,
+      route: {
+        include: {
+          sourceCity: true,
+          destinationCity: true,
+        },
+      },
+      seatAvailabilities: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+}
+
+
 async function viewAllBookings() {
   return await prisma.booking.findMany({
     orderBy: { createdAt: "desc" },
@@ -241,6 +260,7 @@ module.exports = {
   getRoutes,
   addRoute,
   createSchedule,
+  getSchedules,
   viewAllBookings,
   getDashboardStats,
 };

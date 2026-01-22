@@ -16,6 +16,7 @@ router.get("/dashboard", adminController.getDashboardStats);
 router.get("/cities", adminController.getCities);
 router.get("/routes", adminController.getRoutes);  
 router.get("/buses", adminController.getBuses);
+router.get("/schedules", adminController.getSchedules);
 
 module.exports = router;
 
