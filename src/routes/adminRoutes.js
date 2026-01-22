@@ -13,6 +13,7 @@ router.post("/routes", adminController.addRoute);
 router.post("/schedules", adminController.createSchedule);
 router.get("/bookings", adminController.viewBookings);
 router.get("/dashboard", adminController.getDashboardStats);
+router.get("/cities", adminController.getCities);
 
 module.exports = router;
 

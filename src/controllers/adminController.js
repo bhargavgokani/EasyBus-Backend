@@ -6,6 +6,12 @@ async function addCity(req, res) {
   return res.status(201).json({ success: true, city });
 }
 
+async function getCities(req, res) {
+  const cities = await adminService.getCities();
+  return res.json({ success: true, cities });
+}
+
+
 async function addBus(req, res) {
   const { name, number, type, totalSeats } = req.body || {};
   const bus = await adminService.addBus({
@@ -48,6 +54,7 @@ async function getDashboardStats(req, res) {
 
 module.exports = {
   addCity,
+  getCities,
   addBus,
   addRoute,
   createSchedule,

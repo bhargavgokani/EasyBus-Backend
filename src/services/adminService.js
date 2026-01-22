@@ -48,6 +48,12 @@ async function addCity({ name }) {
   }
 }
 
+async function getCities() {
+  return await prisma.city.findMany({
+    orderBy: { name: "asc" },
+  });
+}
+
 async function addBus({ name, number, type, totalSeats }) {
   if (!name || typeof name !== "string") throw new ApiError(400, "Bus name is required");
   if (!number || typeof number !== "string") throw new ApiError(400, "Bus number is required");
@@ -205,6 +211,7 @@ async function viewAllBookings() {
 
 module.exports = {
   addCity,
+  getCities,
   addBus,
   addRoute,
   createSchedule,
