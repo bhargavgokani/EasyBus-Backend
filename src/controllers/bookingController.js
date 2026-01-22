@@ -2,7 +2,7 @@ const bookingService = require("../services/bookingService");
 
 async function confirm(req, res) {
   const { scheduleId, passengers } = req.body || {};
-  const userId = req.user?.id;
+  const userId = req.user.userId; 
 
   const result = await bookingService.confirmBooking({
     userId,

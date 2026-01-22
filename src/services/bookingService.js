@@ -198,7 +198,7 @@ async function confirmBooking({ userId, scheduleId, passengers }) {
 
 async function getUserBookings(userId) {
   return await prisma.booking.findMany({
-    where: { userId },
+    where: { userId: userId },
     orderBy: { createdAt: "desc" },
     include: {
       schedule: {
