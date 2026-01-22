@@ -14,6 +14,7 @@ router.post("/schedules", adminController.createSchedule);
 router.get("/bookings", adminController.viewBookings);
 router.get("/dashboard", adminController.getDashboardStats);
 router.get("/cities", adminController.getCities);
+router.get("/routes", adminController.getRoutes);  
 
 module.exports = router;
 

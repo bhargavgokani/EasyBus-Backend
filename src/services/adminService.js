@@ -117,6 +117,18 @@ async function addRoute({ sourceCityId, destinationId }) {
   }
 }
 
+async function getRoutes() {
+  return await prisma.route.findMany({
+    include: {
+      sourceCity: true,
+      destinationCity: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+}
+
 async function createSchedule({
   busId,
   routeId,
@@ -213,6 +225,7 @@ module.exports = {
   addCity,
   getCities,
   addBus,
+  getRoutes,
   addRoute,
   createSchedule,
   viewAllBookings,

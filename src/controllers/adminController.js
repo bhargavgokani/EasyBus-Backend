@@ -29,6 +29,12 @@ async function addRoute(req, res) {
   return res.status(201).json({ success: true, route });
 }
 
+async function getRoutes(req, res) {
+  const routes = await adminService.getRoutes();
+  return res.json({ success: true, routes });
+}
+
+
 async function createSchedule(req, res) {
   const { busId, routeId, travelDate, departureTime, arrivalTime, price } = req.body || {};
   const schedule = await adminService.createSchedule({
@@ -56,6 +62,7 @@ module.exports = {
   addCity,
   getCities,
   addBus,
+  getRoutes,
   addRoute,
   createSchedule,
   viewBookings,
