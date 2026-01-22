@@ -17,5 +17,11 @@ async function confirm(req, res) {
   });
 }
 
-module.exports = { confirm };
+async function getMyBookings (req, res){
+  const userId = req.user.userId; 
+  const bookings = await bookingService.getUserBookings(userId);
+  res.status(200).json({ success: true, bookings });
+};
+
+module.exports = { confirm, getMyBookings };
 

@@ -196,7 +196,33 @@ async function confirmBooking({ userId, scheduleId, passengers }) {
   return result;
 }
 
+async function getUserBookings(userId) {
+  return await prisma.booking.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      schedule: {
+        include: {
+          bus: true,
+          route: {
+            include: {
+              sourceCity: true,
+              destinationCity: true,
+            },
+          },
+        },
+      },
+      passengers: true,
+      payment: true,
+      seatAvailabilities: {
+        include: { seat: true },
+      },
+    },
+  });
+}
+
 module.exports = {
   confirmBooking,
+  getUserBookings,
 };
 
